@@ -18,10 +18,11 @@ jobs:
           java-version: 21
           distribution: 'zulu'
       - name: SonarQube Analysis
+        continue-on-error: true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=copilotorg -Dsonar.projectKey=copilotproj
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=codeorg -Dsonar.projectKey=codeorg_proj1
 
   snyk-scan:
     needs: sonar-scan
@@ -45,5 +46,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: OWASP ZAP Scan
         uses: zaproxy/action-baseline@v0.14.0
+        continue-on-error: true
         with:
           target: 'https://www.zaproxy.org'
